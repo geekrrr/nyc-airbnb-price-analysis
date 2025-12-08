@@ -35,18 +35,34 @@ All work is implemented in Python using pandas, seaborn/matplotlib, and scikit�
 ## Repository structure
 ```
 AIRBNB_PROJECT/
-├── data/
-│ └── listings.csv
+├── app/
+│   └── streamlit_app.py         # Interactive web app
 │
-├── images/
-│ ├── histogram.png
-│ ├── boxplot.png
-│ ├── scatterplot.png
-│ └── heatmap.png
+├── data/                         # Data files (Git LFS tracked)
+│   ├── listings.csv
+│   ├── calendar.csv
+│   └── reviews.csv
+│
+├── models/                       # Trained ML models
+│   ├── rf_model.joblib
+│   └── preproc.joblib
 │
 ├── notebooks/
-│ └── NYC_Airbnb_EDA_ML.ipynb
+│   └── NYC_Airbnb_Price_Prediction.ipynb
 │
+├── output_images/                # Generated plots
+│   ├── histogram.png
+│   ├── boxplot.png
+│   ├── scatterplot.png
+│   └── heatmap.png
+│
+├── src/                          # Python modules
+│   ├── data_prep.py
+│   └── train_model.py
+│
+├── .gitignore
+├── .gitattributes                # Git LFS configuration
+├── requirements.txt
 └── README.md
 ```
 
@@ -65,14 +81,14 @@ AIRBNB_PROJECT/
 ### 2. Exploratory Data Analysis (EDA)
 
 ### **Price Distribution**
-<img src="images/histogram.png" width="650">
+<img src="output_images/histogram.png" width="650">
 
 The price distribution is **right-skewed**, with most listings under \$200–\$300 but a long tail of luxury listings.
 
 ---
 
 ### **Price by Room Type**
-<img src="images/boxplot.png" width="650">
+<img src="output_images/boxplot.png" width="650">
 
 - Entire homes/apartments → highest prices  
 - Hotel rooms also expensive  
@@ -81,14 +97,14 @@ The price distribution is **right-skewed**, with most listings under \$200–\$3
 ---
 
 ### **Geospatial Price Scatter Plot**
-<img src="images/scatterplot.png" width="650">
+<img src="output_images/scatterplot.png" width="650">
 
 Expensive listings cluster in **Manhattan**, especially near central and tourist areas.
 
 ---
 
 ### **Correlation Heatmap**
-<img src="images/heatmap.png" width="650">
+<img src="output_images/heatmap.png" width="650">
 
 Numeric features show weak direct correlation with price → suggests nonlinear modelling works better.
 
@@ -135,6 +151,24 @@ Random Forest feature importance indicates that:
 - Entire homes/apartments and hotel rooms are priced far above private and shared rooms. 
 - Location has a strong effect on price, with premium clusters visible on the city map. 
 - A tree‑based model (Random Forest) offers substantially better predictive accuracy than a naive baseline or simple linear model.
+---
+
+## 📥 Dataset Download (Required)
+
+This project uses publicly available Airbnb data from **Kaggle**.
+
+👉 **Download the NYC dataset from here:**  
+https://www.kaggle.com/datasets/arthbr11/new-york-city-airbnb-open-data
+
+Download the following files for **New York City**:
+
+- `listings.csv` – Main listings dataset (used in this project)
+- `calendar.csv` – Availability and pricing data (optional)
+- `reviews.csv` – Guest reviews (optional)
+
+### After downloading:
+Place the files inside the `data/` folder:
+
 ---
 
 ## How to run

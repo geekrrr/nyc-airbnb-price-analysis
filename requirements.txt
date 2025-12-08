@@ -1,5 +1,10 @@
 pandas
 numpy
+scikit-learn
+joblib
+streamlit
 matplotlib
 seaborn
-scikit-learn
+folium
+streamlit-folium
+plotly

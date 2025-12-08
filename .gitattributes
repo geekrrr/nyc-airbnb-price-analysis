@@ -1,1 +1,14 @@
+# ===========================
+# Git LFS Configuration
+
+# Track large data files
 *.csv filter=lfs diff=lfs merge=lfs -text
+# Track machine learning model files
+*.joblib filter=lfs diff=lfs merge=lfs -text
+*.pkl filter=lfs diff=lfs merge=lfs -text
+*.pickle filter=lfs diff=lfs merge=lfs -text
+*.h5 filter=lfs diff=lfs merge=lfs -text
+*.hdf5 filter=lfs diff=lfs merge=lfs -text
+# Track large compressed files (if any)
+*.zip filter=lfs diff=lfs merge=lfs -text
+*.tar.gz filter=lfs diff=lfs merge=lfs -text
