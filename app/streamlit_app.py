@@ -28,6 +28,7 @@ st.set_page_config(
 
 # Professional CSS Styling
 st.markdown("""
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style>
     /* Import Google Font */
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
@@ -35,6 +36,22 @@ st.markdown("""
     /* Global styles */
     html, body, [class*="css"] {
         font-family: 'Inter', sans-serif;
+    }
+    
+    /* Icon styling */
+    .fa-icon {
+        width: 24px;
+        height: 24px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .icon-gradient {
+        background: linear-gradient(135deg, #FF385C 0%, #E31C5F 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
     }
     
     /* Main theme colors - Professional palette */
@@ -262,34 +279,35 @@ def load_model_cached():
 with st.sidebar:
     # Custom logo/branding
     st.markdown("""
-    <div style="text-align: center; padding: 1rem 0;">
-        <div style="font-size: 2.5rem;">🏠</div>
-        <div style="font-size: 1.4rem; font-weight: 700; color: #FF385C; margin-top: 0.5rem;">
+    <div style="text-align: center; padding: 1.5rem 0;">
+        <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #FF385C 0%, #E31C5F 100%); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin: 0 auto; box-shadow: 0 8px 24px rgba(255,56,92,0.3);">
+            <i class="fas fa-building" style="font-size: 1.8rem; color: white;"></i>
+        </div>
+        <div style="font-size: 1.3rem; font-weight: 700; color: #222; margin-top: 1rem; letter-spacing: -0.5px;">
             NYC Price Predictor
         </div>
-        <div style="font-size: 0.85rem; color: #717171; margin-top: 0.25rem;">
-            Powered by Machine Learning
+        <div style="font-size: 0.8rem; color: #717171; margin-top: 0.25rem;">
+            ML-Powered Analytics
         </div>
     </div>
     """, unsafe_allow_html=True)
     
     st.markdown("---")
-    st.markdown("### ⚙️ Settings")
+    st.markdown('<p style="font-size: 0.9rem; font-weight: 600; color: #717171; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem;"><i class="fas fa-sliders" style="margin-right: 8px;"></i>Settings</p>', unsafe_allow_html=True)
     
-    uploaded = st.file_uploader("📁 Upload your listings.csv", type=['csv'])
-    use_pretrained = st.checkbox("🤖 Use pretrained model", value=os.path.exists(MODEL_PATH))
+    uploaded = st.file_uploader("Upload your listings.csv", type=['csv'])
+    use_pretrained = st.checkbox("Use pretrained model", value=os.path.exists(MODEL_PATH))
     
-    with st.expander("🔧 Advanced Options"):
+    with st.expander("Advanced Options"):
         train_local = st.button("Train new model locally")
     
     st.markdown("---")
     
     st.markdown("""
     <div style="padding: 1rem; background: white; border-radius: 12px; border: 1px solid #E8E8E8;">
-        <div style="font-weight: 600; color: #222; margin-bottom: 0.5rem;">ℹ️ About</div>
+        <div style="font-weight: 600; color: #222; margin-bottom: 0.5rem;"><i class="fas fa-circle-info" style="color: #00A699; margin-right: 6px;"></i>About</div>
         <div style="font-size: 0.85rem; color: #717171; line-height: 1.5;">
-            This app uses a Random Forest model trained on NYC Airbnb data 
-            to predict nightly listing prices.
+            Random Forest model trained on NYC Airbnb data for price prediction.
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -307,19 +325,19 @@ else:
 
 # Handle training
 if train_local:
-    st.info("🔄 Training model locally (this may take several minutes)...")
+    st.info("Training model locally (this may take several minutes)...")
     from src.train_model import train
     input_path = uploaded if uploaded else data_path
     if input_path is None:
-        st.error("❌ No data supplied for training.")
+        st.error("No data supplied for training.")
     else:
         with st.spinner("Training model... Please wait."):
             try:
                 train(input_path, model_out=MODEL_PATH, preproc_out=PREPROC_PATH)
                 st.cache_resource.clear()
-                st.success("✅ Training completed! Refresh the page to use the new model.")
+                st.success("Training completed! Refresh the page to use the new model.")
             except Exception as e:
-                st.error(f"❌ Training failed: {e}")
+                st.error(f"Training failed: {e}")
 
 # Load model
 model, preproc = None, None
@@ -329,7 +347,7 @@ if use_pretrained:
 # Hero Header
 st.markdown("""
 <div class="hero-header">
-    <h1>🏠 NYC Airbnb Price Predictor</h1>
+    <h1><i class="fas fa-city" style="margin-right: 12px;"></i>NYC Airbnb Price Predictor</h1>
     <p>Accurately predict nightly prices for New York City listings using advanced Machine Learning</p>
 </div>
 """, unsafe_allow_html=True)
@@ -340,25 +358,25 @@ if not df.empty:
     col1, col2, col3, col4 = st.columns(4)
     
     with col1:
-        st.metric("📊 Total Listings", f"{len(dfc):,}")
+        st.metric("Total Listings", f"{len(dfc):,}")
     with col2:
-        st.metric("💰 Avg Price", f"${dfc['price'].mean():.0f}/night")
+        st.metric("Avg Price", f"${dfc['price'].mean():.0f}/night")
     with col3:
-        st.metric("🏘️ Neighborhoods", f"{dfc['neighbourhood'].nunique()}")
+        st.metric("Neighborhoods", f"{dfc['neighbourhood'].nunique()}")
     with col4:
-        st.metric("⭐ Avg Reviews", f"{dfc['number_of_reviews'].mean():.0f}")
+        st.metric("Avg Reviews", f"{dfc['number_of_reviews'].mean():.0f}")
     
     st.markdown("<br>", unsafe_allow_html=True)
 
 # Tabs
-tab1, tab2, tab3, tab4 = st.tabs(["📈 Analytics", "🎯 Predict Price", "📦 Batch Predict", "🗺️ Price Map"])
+tab1, tab2, tab3, tab4 = st.tabs(["Analytics", "Predict Price", "Batch Predict", "Price Map"])
 
 # Tab 1: Analytics (Enhanced EDA)
 with tab1:
-    st.markdown("### 📈 Data Analytics")
+    st.markdown("### Data Analytics")
     
     if df.empty:
-        st.info("📁 No data loaded. Upload listings.csv or place it in data/ folder.")
+        st.info("No data loaded. Upload listings.csv or place it in data/ folder.")
     else:
         dfc = quick_clean(df)
         
@@ -366,7 +384,7 @@ with tab1:
         col1, col2 = st.columns(2)
         
         with col1:
-            st.markdown("#### 💰 Price Distribution")
+            st.markdown("#### Price Distribution")
             fig_hist = px.histogram(
                 dfc[dfc['price'] <= 500],
                 x='price',
@@ -383,7 +401,7 @@ with tab1:
             st.plotly_chart(fig_hist, key="hist_chart")
         
         with col2:
-            st.markdown("#### 🏠 Price by Room Type")
+            st.markdown("#### Price by Room Type")
             room_stats = dfc.groupby('room_type')['price'].agg(['median', 'mean', 'count']).reset_index()
             room_stats.columns = ['Room Type', 'Median Price', 'Mean Price', 'Count']
             fig_room = px.bar(
@@ -453,7 +471,7 @@ with tab1:
             st.plotly_chart(fig_scatter, key="scatter_chart")
         
         with col2:
-            st.markdown("#### 📊 Room Type Distribution")
+            st.markdown("#### Room Type Distribution")
             room_counts = dfc['room_type'].value_counts().reset_index()
             room_counts.columns = ['Room Type', 'Count']
             fig_pie = px.pie(
@@ -472,10 +490,10 @@ with tab1:
 
 # Tab 2: Single Prediction
 with tab2:
-    st.markdown("### 🎯 Predict Single Listing Price")
+    st.markdown("### Predict Single Listing Price")
     
     if df.empty:
-        st.info("📁 No dataset loaded; you can still enter values manually.")
+        st.info("No dataset loaded; you can still enter values manually.")
     
     # Initialize session state
     if 'selected_lat' not in st.session_state:
@@ -524,19 +542,19 @@ with tab2:
             neighborhoods = sorted(df['neighbourhood'].dropna().unique().tolist())
             neighbourhood = st.selectbox("🏘️ Neighbourhood", options=neighborhoods)
         else:
-            neighbourhood = st.text_input("🏘️ Neighbourhood", value="Manhattan")
+            neighbourhood = st.text_input("Neighbourhood", value="Manhattan")
         
-        room_type = st.selectbox("🏠 Room Type", options=['Entire home/apt', 'Private room', 'Shared room', 'Hotel room'])
+        room_type = st.selectbox("Room Type", options=['Entire home/apt', 'Private room', 'Shared room', 'Hotel room'])
         
         col_a, col_b = st.columns(2)
         with col_a:
-            minimum_nights = st.number_input("🌙 Min Nights", value=2, min_value=1)
-            number_of_reviews = st.number_input("⭐ Reviews", value=10, min_value=0)
+            minimum_nights = st.number_input("Min Nights", value=2, min_value=1)
+            number_of_reviews = st.number_input("Reviews", value=10, min_value=0)
         with col_b:
-            reviews_per_month = st.number_input("📈 Reviews/Month", value=1.0, min_value=0.0, step=0.1)
-            availability_365 = st.number_input("📅 Availability (days)", value=180, min_value=0, max_value=365)
+            reviews_per_month = st.number_input("Reviews/Month", value=1.0, min_value=0.0, step=0.1)
+            availability_365 = st.number_input("Availability (days)", value=180, min_value=0, max_value=365)
         
-        calculated_host_listings_count = st.number_input("👤 Host Listings", value=1, min_value=1)
+        calculated_host_listings_count = st.number_input("Host Listings", value=1, min_value=1)
         
         predict_btn = st.button("🔮 Predict Price", key="predict_single")
     
@@ -554,7 +572,7 @@ with tab2:
         }])
         
         if model is None or preproc is None:
-            st.error("❌ Model not loaded. Enable 'Use pretrained model' in sidebar.")
+            st.error("Model not loaded. Enable 'Use pretrained model' in sidebar.")
         else:
             try:
                 X = preproc.transform(row)
@@ -570,24 +588,24 @@ with tab2:
                     <div class="prediction-label">Predicted Nightly Price</div>
                     <div class="prediction-value">${yhat:.2f}</div>
                     <div class="prediction-context">
-                        {"📈" if diff_pct > 0 else "📉"} {abs(diff_pct):.1f}% {"above" if diff_pct > 0 else "below"} average (${avg_price:.0f})
+                        {abs(diff_pct):.1f}% {"above" if diff_pct > 0 else "below"} average (${avg_price:.0f})
                     </div>
                 </div>
                 """, unsafe_allow_html=True)
             except Exception as e:
-                st.error(f"❌ Prediction failed: {e}")
+                st.error(f"Prediction failed: {e}")
 
 # Tab 3: Batch Prediction
 with tab3:
-    st.markdown("### 📦 Batch Predictions")
+    st.markdown("### Batch Predictions")
     
     if df.empty:
-        st.info("📁 No data to predict; upload CSV or place listings.csv in data/.")
+        st.info("No data to predict; upload CSV or place listings.csv in data/.")
     else:
         st.write(f"**Loaded:** {df.shape[0]:,} listings")
         
         if model is None or preproc is None:
-            st.warning("⚠️ Model not loaded. Enable 'Use pretrained model' in sidebar.")
+            st.warning("Model not loaded. Enable 'Use pretrained model' in sidebar.")
         else:
             try:
                 dfc = quick_clean(df)
@@ -600,20 +618,20 @@ with tab3:
                 # Summary metrics
                 col1, col2, col3, col4 = st.columns(4)
                 with col1:
-                    st.metric("📊 Avg Actual", f"${dfc['price'].mean():.0f}")
+                    st.metric("Avg Actual", f"${dfc['price'].mean():.0f}")
                 with col2:
-                    st.metric("🎯 Avg Predicted", f"${dfc['pred_price'].mean():.0f}")
+                    st.metric("Avg Predicted", f"${dfc['pred_price'].mean():.0f}")
                 with col3:
                     mae = np.abs(dfc['diff']).mean()
-                    st.metric("📏 MAE", f"${mae:.0f}")
+                    st.metric("MAE", f"${mae:.0f}")
                 with col4:
                     underpriced = (dfc['diff'] > 20).sum()
-                    st.metric("💡 Underpriced", f"{underpriced:,}")
+                    st.metric("Underpriced", f"{underpriced:,}")
                 
                 st.markdown("---")
                 
                 # Actual vs Predicted chart
-                st.markdown("#### 📊 Actual vs Predicted Prices")
+                st.markdown("#### Actual vs Predicted Prices")
                 sample = dfc.sample(min(500, len(dfc)), random_state=42)
                 fig_compare = px.scatter(
                     sample,
@@ -639,7 +657,7 @@ with tab3:
                 st.plotly_chart(fig_compare, key="compare_chart")
                 
                 # Data table
-                st.markdown("#### 📋 Predictions Table")
+                st.markdown("#### Predictions Table")
                 display_cols = ['id', 'neighbourhood', 'room_type', 'price', 'pred_price', 'diff_pct']
                 st.dataframe(
                     dfc[display_cols].head(50).style.background_gradient(
@@ -651,22 +669,22 @@ with tab3:
                 # Download button
                 csv = dfc.to_csv(index=False)
                 st.download_button(
-                    "📥 Download Full Predictions CSV",
+                    "Download Full Predictions CSV",
                     csv,
                     "airbnb_predictions.csv",
                     "text/csv",
                     key="download_btn"
                 )
             except Exception as e:
-                st.error(f"❌ Batch prediction failed: {e}")
-                st.info("💡 Try retraining the model using the 'Train new model locally' option in the sidebar.")
+                st.error(f"Batch prediction failed: {e}")
+                st.info("Try retraining the model using the 'Train new model locally' option in the sidebar.")
 
 # Tab 4: Price Heatmap
 with tab4:
-    st.markdown("### 🗺️ NYC Price Heatmap")
+    st.markdown("### NYC Price Heatmap")
     
     if df.empty:
-        st.info("📁 No data loaded for map visualization.")
+        st.info("No data loaded for map visualization.")
     else:
         dfc = quick_clean(df)
         
@@ -708,11 +726,5 @@ with tab4:
         )
         st.plotly_chart(fig_map, key="map_chart")
 
-# Footer
-st.markdown("""
-<div class="footer">
-    <p>Built with ❤️ using <a href="https://streamlit.io" target="_blank">Streamlit</a> | 
-    Data from <a href="http://insideairbnb.com" target="_blank">Inside Airbnb</a></p>
-    <p style="font-size: 0.8rem; margin-top: 0.5rem;">© 2024 NYC Airbnb Price Predictor</p>
-</div>
-""", unsafe_allow_html=True)
+# Clean divider at end
+st.markdown("<br>", unsafe_allow_html=True)

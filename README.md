@@ -1,4 +1,4 @@
-# 🏠 NYC Airbnb Price Analysis and Prediction
+#  NYC Airbnb Price Analysis and Prediction
 
 Exploratory Data Analysis (EDA) and machine learning on New York City Airbnb listings to understand pricing drivers and predict nightly prices.
 
